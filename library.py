@@ -343,12 +343,12 @@ def admin_logout():
     return redirect(url_for('first'))
 
 
-# ─────────────────────────── Run ───────────────────────────
+# Create tables whenever the app starts
+with app.app_context():
+    Account.metadata.create_all(bind=db.engines['auth'])
+    SavedTextbook.metadata.create_all(bind=db.engines['personal'])
+    TextbookHistory.metadata.create_all(bind=db.engines['personal'])
+    GlobalBook.metadata.create_all(bind=db.engines['global'])
 
 if __name__ == "__main__":
-    with app.app_context():
-        Account.metadata.create_all(bind=db.engines['auth'])
-        SavedTextbook.metadata.create_all(bind=db.engines['personal'])
-        TextbookHistory.metadata.create_all(bind=db.engines['personal'])
-        GlobalBook.metadata.create_all(bind=db.engines['global'])
     app.run(debug=True)
