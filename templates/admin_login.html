@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin:0; min-height:100vh; background:#111; display:flex; align-items:center; justify-content:center; font-family:'Source Sans 3',sans-serif; }
+    .box { background:#1a1a1a; border:1px solid #333; border-radius:8px; padding:2.5rem 2rem; width:100%; max-width:340px; }
+    h2 { color:#ccc; font-size:1rem; font-weight:600; margin:0 0 1.5rem; letter-spacing:1px; text-transform:uppercase; }
+    input[type="password"] { width:100%; padding:.6rem 1rem; background:#111; border:1px solid #333; border-radius:5px; color:#fff; font-size:.95rem; font-family:inherit; outline:none; margin-bottom:1rem; }
+    input:focus { border-color:#c9963a; }
+    button { width:100%; padding:.65rem; background:#c9963a; color:#111; border:none; border-radius:5px; font-weight:600; cursor:pointer; font-family:inherit; }
+    button:hover { background:#e0aa45; }
+    .err { color:#e87; font-size:.85rem; margin-bottom:1rem; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Admin Access</h2>
+    {% if error %}<p class="err">{{ error }}</p>{% endif %}
+    <form method="POST">
+      <input type="password" name="admin_pw" placeholder="Password" autofocus>
+      <button type="submit">Enter</button>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OpenShelf — Library</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root { --cream:#faf7f2; --ink:#1a1207; --warm:#8b5e3c; --gold:#c9963a; --muted:#7a6a58; }
+    body { background: var(--cream); font-family: 'Source Sans 3', sans-serif; margin: 0; }
+
+    .top-nav {
+      background: var(--ink); padding: 0 2rem; height: 60px;
+      display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100;
+    }
+    .top-nav .brand { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--cream); text-decoration: none; }
+    .top-nav .nav-right { display: flex; gap: 1.5rem; align-items: center; }
+    .top-nav .nav-right a { color: #ccc; text-decoration: none; font-size: .9rem; }
+    .top-nav .nav-right a:hover { color: var(--gold); }
+
+    .search-bar-wrap { background: var(--warm); padding: .75rem 2rem; }
+    .search-bar-wrap form { max-width: 560px; display: flex; gap: .5rem; }
+    .search-bar-wrap input {
+      flex: 1; padding: .55rem 1rem; border: none; border-radius: 5px;
+      font-family: inherit; background: rgba(255,255,255,.15); color: #fff; font-size: .95rem;
+      border: 1px solid rgba(255,255,255,.2); outline: none;
+    }
+    .search-bar-wrap input::placeholder { color: rgba(255,255,255,.6); }
+    .search-bar-wrap input:focus { background: rgba(255,255,255,.22); }
+    .search-bar-wrap button {
+      padding: .55rem 1.2rem; background: var(--gold); color: var(--ink);
+      border: none; border-radius: 5px; font-weight: 600; cursor: pointer; font-family: inherit;
+    }
+
+    .page-body { padding: 2.5rem 0; }
+    .section-head { font-family: 'Playfair Display', serif; font-size: 1.6rem; margin-bottom: 1.5rem; color: var(--ink); }
+
+    .book-card {
+      background: #fff; border-radius: 8px; overflow: hidden;
+      box-shadow: 0 2px 10px rgba(26,18,7,.07); height: 100%;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .book-card:hover { transform: translateY(-3px); box-shadow: 0 8px 22px rgba(26,18,7,.13); }
+    .book-card img { width: 100%; height: 210px; object-fit: cover; }
+    .book-card-body { padding: 1rem; }
+    .book-card-body h5 { font-family: 'Playfair Display', serif; font-size: .97rem; color: var(--ink); margin-bottom: .25rem; }
+    .book-card-body .author { font-size: .8rem; color: var(--muted); margin-bottom: .9rem; }
+    .btn-read {
+      padding: .4rem 1rem; background: var(--ink); color: #fff;
+      border: none; border-radius: 4px; font-size: .82rem; font-weight: 600;
+      text-decoration: none; cursor: pointer; transition: background .2s;
+      display: inline-block;
+    }
+    .btn-read:hover { background: var(--warm); color: #fff; }
+    .btn-save {
+      padding: .4rem 1rem; background: transparent; color: var(--warm);
+      border: 1.5px solid var(--warm); border-radius: 4px; font-size: .82rem; font-weight: 600;
+      cursor: pointer; font-family: inherit; transition: all .2s;
+    }
+    .btn-save:hover { background: var(--warm); color: #fff; }
+
+    .toast-wrap { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999; }
+
+    footer { background: var(--ink); color: #7a6a58; text-align: center; padding: 1.5rem; font-size: .83rem; }
+    footer a { color: var(--gold); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="top-nav">
+  <a class="brand" href="{{ url_for('home') }}">OpenShelf</a>
+  <div class="nav-right">
+    <a href="{{ url_for('profile') }}">👤 Profile</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+  </div>
+</nav>
+
+<!-- SEARCH BAR -->
+<div class="search-bar-wrap">
+  <form method="GET" action="{{ url_for('home') }}">
+    <input type="search" name="q" value="{{ query }}" placeholder="Search by title or author…" autocomplete="off">
+    <button type="submit">Search</button>
+  </form>
+</div>
+
+<!-- FLASH TOASTS -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <div class="toast-wrap">
+    {% for msg in messages %}
+    <div class="alert alert-success alert-dismissible fade show py-2 px-3" role="alert" style="font-size:.9rem;">
+      {{ msg }}
+      <button type="button" class="btn-close btn-close-sm" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+{% endwith %}
+
+<!-- BOOKS -->
+<div class="page-body">
+  <div class="container">
+    {% if query %}
+    <h2 class="section-head">Results for "{{ query }}"</h2>
+    {% else %}
+    <h2 class="section-head">The Collection</h2>
+    {% endif %}
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+      {% for book in books %}
+      <div class="col">
+        <div class="book-card">
+          <img src="{{ book.image or 'https://via.placeholder.com/300x210?text=No+Cover' }}" alt="{{ book.book_name }}">
+          <div class="book-card-body">
+            <h5>{{ book.book_name }}</h5>
+            <p class="author">{{ book.author_name }}</p>
+            <div class="d-flex gap-2">
+              <a href="{{ url_for('read_book', book_id=book.sno) }}" class="btn-read">Read</a>
+              <form method="POST" action="{{ url_for('home') }}" style="display:inline;">
+                <input type="hidden" name="title"          value="{{ book.book_name }}">
+                <input type="hidden" name="author"         value="{{ book.author_name }}">
+                <input type="hidden" name="image"          value="{{ book.image }}">
+                <input type="hidden" name="reference_link" value="{{ book.reference_link }}">
+                <input type="hidden" name="action"         value="save">
+                <button type="submit" class="btn-save">Save</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="col-12"><p class="text-muted">No books found.</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>OpenShelf · Classic literature from <a href="https://www.gutenberg.org" target="_blank">Project Gutenberg</a></p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

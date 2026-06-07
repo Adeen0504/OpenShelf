@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Register — OpenShelf</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --cream:#faf7f2; --ink:#1a1207; --warm:#8b5e3c; --gold:#c9963a; }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh;
+      background: var(--ink);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Source Sans 3', sans-serif;
+      padding: 2rem 1rem;
+    }
+    .card {
+      background: var(--cream); border-radius: 12px;
+      padding: 2.5rem 2rem; width: 100%; max-width: 480px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+    }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--ink); margin-bottom: .25rem; }
+    .subtitle { font-size: .85rem; color: #7a6a58; margin-bottom: 2rem; }
+    label { display: block; font-size: .83rem; font-weight: 600; color: var(--ink); margin-bottom: .35rem; }
+    input[type="text"], input[type="email"], input[type="password"] {
+      width: 100%; padding: .6rem 1rem; border: 1.5px solid #ddd;
+      border-radius: 6px; font-family: inherit; font-size: .93rem; color: var(--ink);
+      background: #fff; outline: none; transition: border-color .2s; margin-bottom: 1.1rem;
+    }
+    input:focus { border-color: var(--warm); }
+    .field-group { margin-bottom: 1.1rem; }
+    .radio-group, .check-group { display: flex; flex-wrap: wrap; gap: .6rem .8rem; margin-top: .4rem; }
+    .radio-group label, .check-group label { font-weight: 400; font-size: .88rem; display: flex; align-items: center; gap: .35rem; cursor: pointer; }
+    .radio-group input, .check-group input { width: auto; margin: 0; }
+    .error { background: #fde8e8; color: #c0392b; border-radius: 6px; padding: .6rem 1rem; font-size: .88rem; margin-bottom: 1rem; }
+    .btn-submit {
+      width: 100%; padding: .75rem;
+      background: var(--ink); color: var(--cream);
+      border: none; border-radius: 6px; font-size: 1rem; font-weight: 600;
+      cursor: pointer; font-family: inherit; transition: background .2s; margin-top: .5rem;
+    }
+    .btn-submit:hover { background: var(--warm); }
+    .footer-link { text-align: center; margin-top: 1.2rem; font-size: .85rem; color: #7a6a58; }
+    .footer-link a { color: var(--warm); font-weight: 600; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">OpenShelf</div>
+    <p class="subtitle">Create your free account</p>
+
+    {% if msg %}
+    <div class="error">{{ msg }}</div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('register') }}">
+      <label>Full Name</label>
+      <input type="text" name="name" required>
+
+      <label>Email</label>
+      <input type="email" name="email" required>
+
+      <label>Phone Number</label>
+      <input type="text" name="phone" required>
+
+      <label>Username</label>
+      <input type="text" name="username" required autocomplete="username">
+
+      <label>Password</label>
+      <input type="password" name="password" required autocomplete="new-password">
+
+      <div class="field-group">
+        <label>Gender</label>
+        <div class="radio-group">
+          <label><input type="radio" name="radio" value="Male" required> Male</label>
+          <label><input type="radio" name="radio" value="Female"> Female</label>
+          <label><input type="radio" name="radio" value="Other"> Other</label>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Languages Known</label>
+        <div class="check-group">
+          <label><input type="checkbox" name="checkbox" value="English"> English</label>
+          <label><input type="checkbox" name="checkbox" value="Telugu"> Telugu</label>
+          <label><input type="checkbox" name="checkbox" value="Hindi"> Hindi</label>
+          <label><input type="checkbox" name="checkbox" value="Tamil"> Tamil</label>
+          <label><input type="checkbox" name="checkbox" value="Kannada"> Kannada</label>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit">Create Account</button>
+    </form>
+
+    <p class="footer-link">Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+  </div>
+</body>
+</html>

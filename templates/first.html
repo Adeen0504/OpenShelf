@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OpenShelf — Free Classic Library</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #faf7f2;
+      --ink:   #1a1207;
+      --warm:  #8b5e3c;
+      --gold:  #c9963a;
+      --muted: #7a6a58;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { background: var(--cream); color: var(--ink); font-family: 'Source Sans 3', sans-serif; margin: 0; }
+
+    /* NAV */
+    .top-nav {
+      background: var(--ink);
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .top-nav .brand { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--cream); text-decoration: none; letter-spacing: .5px; }
+    .top-nav .nav-links { display: flex; gap: 1rem; align-items: center; }
+    .top-nav .nav-links a { color: #ccc; text-decoration: none; font-size: .9rem; transition: color .2s; }
+    .top-nav .nav-links a:hover { color: var(--gold); }
+    .btn-nav { background: var(--gold); color: var(--ink) !important; border-radius: 4px; padding: 6px 16px !important; font-weight: 600 !important; }
+    .btn-nav:hover { background: #e0aa45 !important; }
+
+    /* HERO */
+    .hero {
+      background: var(--ink);
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(201,150,58,.15) 0%, transparent 70%);
+    }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 6vw, 4.5rem); color: var(--cream); margin-bottom: .5rem; position: relative; }
+    .hero p { color: #a8957e; font-size: 1.1rem; max-width: 520px; margin: 0 auto 2rem; position: relative; }
+    .search-wrap { max-width: 520px; margin: 0 auto; display: flex; gap: .5rem; position: relative; }
+    .search-wrap input {
+      flex: 1; padding: .75rem 1.2rem; border: none; border-radius: 6px;
+      background: rgba(255,255,255,.08); color: var(--cream);
+      font-family: inherit; font-size: 1rem; outline: none;
+      border: 1px solid rgba(255,255,255,.1);
+      transition: border-color .2s;
+    }
+    .search-wrap input::placeholder { color: #7a6a58; }
+    .search-wrap input:focus { border-color: var(--gold); }
+    .search-wrap button {
+      padding: .75rem 1.5rem; background: var(--gold); color: var(--ink);
+      border: none; border-radius: 6px; font-weight: 600; cursor: pointer;
+      font-family: inherit; transition: background .2s;
+    }
+    .search-wrap button:hover { background: #e0aa45; }
+
+    /* STATS STRIP */
+    .stats-strip {
+      background: var(--warm);
+      color: var(--cream);
+      padding: .6rem 2rem;
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      font-size: .85rem;
+      font-weight: 600;
+      letter-spacing: .5px;
+    }
+
+    /* SECTION TITLE */
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+    }
+    .section-title span { color: var(--warm); }
+
+    /* BOOK CARDS */
+    .books-section { padding: 3rem 0; }
+    .book-card {
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(26,18,7,.08);
+      height: 100%;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .book-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(26,18,7,.14); }
+    .book-card img { width: 100%; height: 220px; object-fit: cover; }
+    .book-card-body { padding: 1rem 1.1rem 1.2rem; }
+    .book-card-body h5 { font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: .25rem; color: var(--ink); }
+    .book-card-body .author { font-size: .82rem; color: var(--muted); margin-bottom: 1rem; }
+    .btn-read {
+      display: inline-block; padding: .45rem 1.1rem;
+      background: var(--ink); color: var(--cream);
+      border-radius: 4px; font-size: .85rem; font-weight: 600;
+      text-decoration: none; transition: background .2s;
+    }
+    .btn-read:hover { background: var(--warm); color: var(--cream); }
+    .btn-login-cta {
+      display: inline-block; padding: .45rem 1.1rem;
+      border: 1.5px solid var(--warm); color: var(--warm);
+      border-radius: 4px; font-size: .85rem; font-weight: 600;
+      text-decoration: none; transition: all .2s;
+    }
+    .btn-login-cta:hover { background: var(--warm); color: #fff; }
+
+    /* FOOTER */
+    footer {
+      background: var(--ink); color: #7a6a58;
+      text-align: center; padding: 2rem;
+      font-size: .85rem;
+    }
+    footer a { color: var(--gold); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="top-nav">
+  <a class="brand" href="/">OpenShelf</a>
+  <div class="nav-links">
+    <a href="{{ url_for('login') }}" class="btn-nav">Login</a>
+    <a href="{{ url_for('register') }}">Sign Up</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>OpenShelf</h1>
+  <p>A free public library of classic literature. Browse, read, and save — no subscription needed.</p>
+  <form class="search-wrap" method="GET" action="{{ url_for('first') }}">
+    <input type="search" name="q" value="{{ query }}" placeholder="Search by title or author…" autocomplete="off">
+    <button type="submit">Search</button>
+  </form>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <span>📚 Curated Classics</span>
+  <span>📖 Free to Read</span>
+  <span>✅ No Account Required to Browse</span>
+</div>
+
+<!-- BOOKS GRID -->
+<section class="books-section">
+  <div class="container">
+    {% if query %}
+    <h2 class="section-title">Results for "<span>{{ query }}</span>"</h2>
+    {% else %}
+    <h2 class="section-title">Featured <span>Books</span></h2>
+    {% endif %}
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+      {% for book in books %}
+      <div class="col">
+        <div class="book-card">
+          <img src="{{ book.image or 'https://via.placeholder.com/300x220?text=No+Cover' }}" alt="{{ book.book_name }}">
+          <div class="book-card-body">
+            <h5>{{ book.book_name }}</h5>
+            <p class="author">{{ book.author_name }}</p>
+            <div class="d-flex gap-2">
+              <a href="{{ url_for('read_book', book_id=book.sno) }}" class="btn-read">Read</a>
+              <a href="{{ url_for('login') }}" class="btn-login-cta">Save</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="col-12">
+        <p class="text-muted">No books found for "{{ query }}".</p>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if not query %}
+    <div class="text-center mt-4">
+      <a href="{{ url_for('login') }}" class="btn-read" style="padding:.7rem 2rem;font-size:1rem;">Login to see full collection →</a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<footer>
+  <p>OpenShelf · Classic literature, freely available via <a href="https://www.gutenberg.org" target="_blank">Project Gutenberg</a></p>
+  <p style="margin-top:.5rem;"><a href="{{ url_for('login') }}">Login</a> · <a href="{{ url_for('register') }}">Register</a></p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

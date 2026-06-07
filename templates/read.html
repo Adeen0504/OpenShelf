@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ book.book_name }} — OpenShelf</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root { --cream:#faf7f2; --ink:#1a1207; --warm:#8b5e3c; --gold:#c9963a; }
+    body { background: #111; color: var(--cream); font-family: 'Source Sans 3', sans-serif; margin: 0; height: 100vh; display: flex; flex-direction: column; }
+    .reader-nav {
+      background: var(--ink);
+      padding: .6rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .reader-nav .brand { font-family: 'Playfair Display', serif; color: var(--cream); text-decoration: none; font-size: 1.1rem; }
+    .reader-nav .book-info { font-size: .85rem; color: #a8957e; }
+    .reader-nav .back-btn {
+      color: var(--gold); text-decoration: none; font-size: .9rem; font-weight: 600;
+    }
+    .reader-nav .back-btn:hover { color: #e0aa45; }
+    .pdf-frame { flex: 1; width: 100%; border: none; display: block; }
+    .no-pdf {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 1rem;
+      color: #a8957e;
+    }
+    .no-pdf a { color: var(--gold); }
+  </style>
+</head>
+<body>
+
+<nav class="reader-nav">
+  <a class="brand" href="/">OpenShelf</a>
+  <span class="book-info">{{ book.book_name }} · {{ book.author_name }}</span>
+  {% if session.get('loggedin') %}
+    <a class="back-btn" href="{{ url_for('home') }}">← Back to Library</a>
+  {% else %}
+    <a class="back-btn" href="{{ url_for('first') }}">← Back</a>
+  {% endif %}
+</nav>
+
+<!-- PDF embedded via proxy route — opens clean in browser without external redirect -->
+<iframe
+  class="pdf-frame"
+  src="{{ url_for('pdf_proxy', book_id=book.sno) }}"
+  title="{{ book.book_name }}"
+  loading="lazy">
+  <div class="no-pdf">
+    <p>Your browser can't display this PDF inline.</p>
+    <a href="{{ url_for('pdf_proxy', book_id=book.sno) }}" target="_blank">Open PDF directly</a>
+  </div>
+</iframe>
+
+</body>
+</html>
